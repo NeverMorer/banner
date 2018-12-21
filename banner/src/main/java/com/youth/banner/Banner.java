@@ -36,6 +36,8 @@ import static android.support.v4.view.ViewPager.PageTransformer;
 public class Banner extends FrameLayout implements OnPageChangeListener {
     public String tag = "banner";
     private int mIndicatorMargin = BannerConfig.PADDING_SIZE;
+    private int mViewPagerMargin;
+    private int mViewPagerClipMargin;
     private int mIndicatorWidth;
     private int mIndicatorHeight;
     private int indicatorSize;
@@ -109,6 +111,8 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
         numIndicator = (TextView) view.findViewById(R.id.numIndicator);
         numIndicatorInside = (TextView) view.findViewById(R.id.numIndicatorInside);
         bannerDefaultImage.setImageResource(bannerBackgroundImage);
+        setViewPagerStartEndMargin(mViewPagerMargin);
+        setPagerClipMargin(mViewPagerClipMargin);
         initViewPagerScroll();
     }
 
@@ -132,6 +136,8 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
         titleTextSize = typedArray.getDimensionPixelSize(R.styleable.Banner_title_textsize, BannerConfig.TITLE_TEXT_SIZE);
         mLayoutResId = typedArray.getResourceId(R.styleable.Banner_banner_layout, mLayoutResId);
         bannerBackgroundImage = typedArray.getResourceId(R.styleable.Banner_banner_default_image, R.drawable.no_banner);
+        mViewPagerMargin = typedArray.getDimensionPixelSize(R.styleable.Banner_viewpager_margin, 0);
+        mViewPagerClipMargin = typedArray.getDimensionPixelSize(R.styleable.Banner_viewpager_clip_margin, 0);
         typedArray.recycle();
     }
 
@@ -295,7 +301,7 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
     }
 
     private void setBannerStyleUI() {
-        int visibility =count > 1 ? View.VISIBLE :View.GONE;
+        int visibility = count > 1 ? View.VISIBLE : View.GONE;
         switch (bannerStyle) {
             case BannerConfig.CIRCLE_INDICATOR:
                 indicator.setVisibility(visibility);
@@ -395,6 +401,18 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
             }
 
         }
+    }
+
+    public void setViewPagerStartEndMargin(int margin) {
+        if (margin > 0) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(viewPager.getLayoutParams().width, viewPager.getLayoutParams().height);
+            params.setMargins(margin, 0, margin, 0);
+            viewPager.setLayoutParams(params);
+        }
+    }
+
+    public void setPagerClipMargin(int margin) {
+        viewPager.setPageMargin(margin);
     }
 
     private void createIndicator() {
@@ -576,7 +594,7 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
 
     @Override
     public void onPageSelected(int position) {
-        currentItem=position;
+        currentItem = position;
         if (mOnPageChangeListener != null) {
             mOnPageChangeListener.onPageSelected(toRealPosition(position));
         }

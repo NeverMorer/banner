@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         View header = LayoutInflater.from(this).inflate(R.layout.header, null);
         banner = (Banner) header.findViewById(R.id.banner);
         banner.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, App.H / 4));
+        banner.setViewPagerStartEndMargin(50);
+        banner.setPagerClipMargin(20);
         listView.addHeaderView(banner);
 
         String[] data = getResources().getStringArray(R.array.demo_list);
